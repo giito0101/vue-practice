@@ -10,14 +10,13 @@ type Product = {
 export const useProductStore = defineStore("product", {
   state: () => ({
     products: [] as Product[],
+    loading: false,
+    error: null as string | null,
   }),
   actions: {
-    fetchProducts() {
-      this.products = [
-        { id: 1, name: "ノートPC", price: 120000, stock: 5 },
-        { id: 2, name: "マウス", price: 3000, stock: 20 },
-        { id: 3, name: "キーボード", price: 8000, stock: 10 },
-      ];
+    async fetchProducts() {
+      const response = await fetch("http://localhost:8000/products");
+      this.products = await response.json();
     },
   },
 });
