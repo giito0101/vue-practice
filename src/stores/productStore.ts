@@ -18,5 +18,17 @@ export const useProductStore = defineStore("product", {
       const response = await fetch("http://localhost:8000/products");
       this.products = await response.json();
     },
+    async createProduct(product: Omit<Product, "id">) {
+      const response = await fetch("http://localhost:8000/products/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      const newProduct = await response.json();
+      this.products.push(newProduct);
+    },
   },
 });
