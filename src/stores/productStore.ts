@@ -27,6 +27,11 @@ export const useProductStore = defineStore("product", {
         body: JSON.stringify(product),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw errorData;
+      }
+
       const newProduct = await response.json();
       this.products.push(newProduct);
     },
