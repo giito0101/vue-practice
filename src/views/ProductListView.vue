@@ -15,6 +15,9 @@ onMounted(() => {
   <ul>
     <li v-for="product in productStore.products" :key="product.id">
       {{ product.name }} / {{ product.price }}円 / 在庫: {{ product.stock }}
+      <RouterLink :to="`/products/${product.id}`"> 詳細 </RouterLink>
+
+      <RouterLink :to="`/products/${product.id}/edit`"> 編集 </RouterLink>
     </li>
   </ul>
 </template>
