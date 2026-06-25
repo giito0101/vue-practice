@@ -14,6 +14,7 @@ const form = reactive({
   name: "",
   price: "",
   stock: "",
+  description: "",
 });
 
 const handleSubmit = async () => {
@@ -21,6 +22,7 @@ const handleSubmit = async () => {
     name: form.name,
     price: parseInt(form.price, 10),
     stock: parseInt(form.stock, 10),
+    description: form.description,
   };
 
   try {
@@ -28,6 +30,7 @@ const handleSubmit = async () => {
       name: null,
       price: null,
       stock: null,
+      description: null,
     };
 
     await productStore.createProduct(payload);
@@ -45,6 +48,7 @@ const handleSubmit = async () => {
     } else {
       errors.value = {
         general: "商品登録に失敗しました。再度お試しください。",
+        description: null,
       };
     }
   }
@@ -72,6 +76,11 @@ const handleSubmit = async () => {
         <label for="stock">在庫数:</label>
         <input id="stock" v-model="form.stock" type="number" required />
         <p v-if="errors.stock" class="error">{{ errors.stock }}</p>
+      </div>
+      <div>
+        <label for="description">商品説明:</label>
+        <textarea id="description" v-model="form.description" required></textarea>
+        <p v-if="errors.description" class="error">{{ errors.description }}</p>
       </div>
       <button type="submit">登録</button>
     </form>

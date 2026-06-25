@@ -1,27 +1,21 @@
-<!-- src/views/ProductDetailView.vue -->
-
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  stock: number;
-  description?: string;
-};
+import { useProductStore } from "@/stores/productStore";
 
 const route = useRoute();
 
-const product = ref<Product | null>(null);
+const productStore = useProductStore();
+
+const productId = Number(route.params.id);
 
 onMounted(async () => {
-  const id = route.params.id;
-
-  const response = await fetch(`/api/products/${id}`);
-  product.value = await response.json();
+  if (productStore.products.length === 0) {
+    await productStore.fetchProducts();
+  }
 });
+
+const product = computed(() => productStore.products.find((p) => p.id === productId) ?? null);
 </script>
 
 <template>
@@ -33,11 +27,11 @@ onMounted(async () => {
       <p>商品名: {{ product.name }}</p>
       <p>価格: {{ product.price }}円</p>
       <p>在庫: {{ product.stock }}</p>
-      <p>説明: {{ product.description }}</p>
+      <p>説明: {{ product.description || "なし" }}</p>
 
-      <RouterLink :to="`/products/${product.id}/edit`"> 編集 </RouterLink>
+      <RouterLink :to="`/products/${product.id}/edit`">編集</RouterLink>
 
-      <RouterLink to="/products"> 一覧へ戻る </RouterLink>
+      <RouterLink to="/products">一覧へ戻る</RouterLink>
     </div>
 
     <p v-else>読み込み中...</p>
